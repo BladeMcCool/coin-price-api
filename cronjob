@@ -1,0 +1,1 @@
+* * * * * root /usr/local/bin/npx ts-node /usr/src/app/src/get-latest-quotes.ts >> /var/log/cron.log 2>&1

@@ -1,4 +1,8 @@
 ## Dockerized Run
+
+### Build the compose project
+`docker-compose build`
+
 - todo :( 
 
 ## Local Run
@@ -8,7 +12,7 @@
 
 ### Start a postgres container to go with it
 
-docker run --name my-postgres -e POSTGRES_USER=johndoe -e POSTGRES_PASSWORD=randompassword -e POSTGRES_DB=mydatabase -p 5432:5432 -d postgres
+`docker run --name my-postgres -e POSTGRES_USER=johndoe -e POSTGRES_PASSWORD=randompassword -e POSTGRES_DB=mydatabase -p 5432:5432 -d postgres`
 
 ### Define a .env file with db connection and coin market cap api key.
 ```bash
@@ -20,11 +24,11 @@ CMC_API_KEY="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 `npx prisma migrate dev --name init`
 
 ### Initialize the symbols we are going to allow:
-`npm ts-node src/init-symbols.ts`
+`npx ts-node src/init-symbols.ts`
 
 ### Grab latest quotes for all symbols and insert into db:
 `npm run updater`  
-~~npx ts-node src/get-latest-quotes.ts~~
+~~`npx ts-node src/get-latest-quotes.ts`~~
 - For now, to run this on a schedule go into src directory and execute  ./run-updater.sh which will run it once per minute.
 - todo:
   - periodic execution eg cron, perhaps some container can be setup for this and just run in the bg doing updates
@@ -37,6 +41,10 @@ CMC_API_KEY="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 
 ### Query for prices:
 http://127.0.0.1:3000/quote?order=asc&limit=50&offset=5&symbol=DOGE&sortBy=Price
+
+### Dump the pg database of collected pricing data
+`docker exec -t my-postgres pg_dump -U johndoe mydb > db_dump.sql`  
+this will put a local file called db_dump.sql
 
 ### The Journey
 - Being unfamiliar familiar with any free API for this, investigating CoinMarketCap and CoinGecko -- seems CoinMarketCap has a free tier with some api credits. Tried to access CoinGecko but option to obtain API key was not appearing. Gave up on CoinGecko and will proceed with CoinMarketCap however it appears there is no source of historical data on free tier. So ... if we are going to even consider supporting historical data back in time before our cron data collector was started then we must continue researching to find a suitable API. That research now becomes a stretch goal for this project if time allows.
