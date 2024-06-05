@@ -3,7 +3,9 @@
 ### Build the compose project
 `docker-compose build`
 
-- todo :( 
+`docker-compose up -d`
+
+- but I didnt get a chance to test it properly, i think it is broken still. ran out of time. 
 
 ## Local Run
 
