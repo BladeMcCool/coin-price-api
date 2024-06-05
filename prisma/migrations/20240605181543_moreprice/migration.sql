@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Quote" ALTER COLUMN "Price" SET DATA TYPE DECIMAL(14,6);
