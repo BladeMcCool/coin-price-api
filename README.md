@@ -1,11 +1,9 @@
 ## Dockerized Run
 
-### Build the compose project
-`docker-compose build`
+### Build and run the compose project
+`docker-compose build`  
 
 `docker-compose up -d`
-
-- but I didnt get a chance to test it properly, i think it is broken still. ran out of time. 
 
 ## Local Run
 
