@@ -1,11 +1,26 @@
 ## Dockerized Run
 
-### Build the compose project
-`docker-compose build`
+### Define a .env file with db connection and coin market cap api key.
+```bash
+DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
+CMC_API_KEY="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+```
+
+### Build and run the compose project
+`docker-compose build`  
 
 `docker-compose up -d`
 
-- but I didnt get a chance to test it properly, i think it is broken still. ran out of time. 
+The 'web' component of the docker compose will also be running the cron task to grab latest pricing every minute from the CMC api.
+
+Url to access the service API: http://localhost:3000/quote
+- Example requests:
+  - get up to 10 recent records for all supported (BTC, ETH, DOGE) coins:
+    - http://localhost:3000/quote
+  - get up to 10 recent records for BTC:
+    - http://localhost:3000/quote?symbol=BTC
+  - Query for a date range of BTC sorting by Price ascending, offset by 2 and limit to 5 records.
+    - http://localhost:3000/quote?symbol=BTC&startDate=2024-06-08T19:59:00&endDate=2024-06-08T20:30&sortBy=Price&order=asc&limit=5&offset=2
 
 ## Local Run
 
@@ -15,12 +30,6 @@
 ### Start a postgres container to go with it
 
 `docker run --name my-postgres -e POSTGRES_USER=johndoe -e POSTGRES_PASSWORD=randompassword -e POSTGRES_DB=mydatabase -p 5432:5432 -d postgres`
-
-### Define a .env file with db connection and coin market cap api key.
-```bash
-DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
-CMC_API_KEY="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-```
 
 ### Establish the db
 `npx prisma migrate dev --name init`

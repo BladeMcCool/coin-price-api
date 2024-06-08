@@ -9,11 +9,14 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
-# Copy the rest of your application
-COPY . .
+# Install ts-node globally
+RUN npm install -g ts-node
 
 # Install cron
 RUN apt-get update && apt-get install -y cron
+
+# Copy the rest of your application
+COPY . .
 
 # Copy the cron job configuration file
 COPY cronjob /etc/cron.d/cronjob
@@ -28,5 +31,4 @@ RUN touch /var/log/cron.log
 EXPOSE 3000
 
 # Run migrations and start cron and the Node.js application
-# todo this stuff should go in a script, but i'm running out of time.
-CMD npx prisma generate && npx prisma migrate deploy && npx ts-node src/init-symbols.ts || true && cron && npm run dev
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
