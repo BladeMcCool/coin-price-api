@@ -1,3 +1,46 @@
+# Coin Price API
+
+### Satoshi.money take home assessment - 2024-06-05 (June 5 2024)
+
+***
+#### Please complete and return in 6 hrs from your start time.
+#### Take Home Assignment - Backend
+
+#### Summary
+Create a RESTful API service using Node.js with Express (or similar framework) that fetches price data for various coins from a third-party API over time, and provides a search endpoint to query the data. The service should use public third-party APIs such as CoinGecko or CoinMarketCap to gather 
+this data and store it in a database.
+
+#### Requirements
+1. Implement a script/cron job that runs every n seconds. It should fetch price data for multiple coins from a public API, and store this data in a PostgreSQL database. You are free to use an ORM if you want to, we use Prisma at Satoshi. You can spin up a free PostgreSQL database on ElephantSQL
+
+1. Implement a search endpoint that accepts query parameters to filter and sort the price data. You should also add the ability for clients to specify limit and offset query parameters so they can implement pagination.
+
+1. Introduce caching to store the results of common queries to improve response time and reduce the load on the third-party service (and to prevent being rate limited by their API).
+
+#### Stretch Goals
+- Add rate limiting to your API to prevent abuse.
+- Dockerize the application for easy deployment.
+
+#### Submission Guidelines
+- The code should be written in Node.js and TypeScript.
+- The code should be well-documented.
+- The code should follow best practices for Node.js/Express and PostgreSQL.
+- The code should include a README with instructions on how to run the app.
+- The code should be made publicly available on GitHub with proper commit messages.
+#### Evaluation Criteria
+- Code quality and readability.
+- Handling of asynchronous operations and data fetching.
+- Database schema design.
+- Bonus points for creative additional features.
+
+***
+#### Notes:
+
+This was a nice take home project that was fairly straightforward to complete within the alotted time. The company required the candidate to find the API to use for supplying the info on their own, which I think is a mistake b/c of the amount of time spent reading documentation and testing APIs to make sure they can deliver the required information at NO COST. I time boxed that part of the assignment to one hour and failed to find a free working API that would give historical price data, I was limited to Coin Market Caps free tier real time data. So the project was framed around being able to populate my postgres DB with that info from that API every minute. 
+
+I essentially completed it within the deadline including the stretch goals for dockerization of the db+web server with cron task running, however I ran into a weird issue getting the crontab to actually be executed -- in the end it was a windows line ending problem with the crontab file, and after switching my file to unix style line endings that issue was resolved.
+***
+
 ## Dockerized Run
 
 ### Define a .env file with db connection and coin market cap api key.
@@ -46,6 +89,7 @@ Url to access the service API: http://localhost:3000/quote
   - should skip inserting essentially the same record twice. if newest time record for the symbol is the same time we got in the response, then skip inserting a record. at the moment we will just insert the results we got regardless of if it duplicates. 
   - (index the SymbolId+Time field of the Quote table)
   - in the web server, if enddate is supplied but doesnt have a time component then go up to the end of that day as opposed to midnight/day start
+  - note: in the docker compose version, there is a cron job in the webserver container.
 
 ### Run the script:
 `npm run dev`
